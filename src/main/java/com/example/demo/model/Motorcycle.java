@@ -14,6 +14,7 @@ public class Motorcycle {
     private String color;
     private String displacement;
     private String make;
+
     public Motorcycle(){
     }
     public Motorcycle(String make, String color, String displacement) {
