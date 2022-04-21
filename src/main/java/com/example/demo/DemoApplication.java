@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.model.Motorcycle;
+import com.example.demo.model.Vehicle;
 import com.example.demo.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,9 +19,9 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String...args) throws Exception {
-		this.vehicleRepository.save(new Motorcycle("Honda", "Black", "400cc"));
-		this.vehicleRepository.save(new Motorcycle("Ducati", "Red", "1200cc"));
-		this.vehicleRepository.save(new Motorcycle("Aprilla", "Orange", "900cc"));
+		this.vehicleRepository.save(new Vehicle("Car", "Honda", "Black", "400"));
+		this.vehicleRepository.save(new Vehicle("Motorcycle","Ducati", "Red", "1200"));
+		this.vehicleRepository.save(new Vehicle("Car", "Aprilla", "Orange", "900"));
 	}
 
 
