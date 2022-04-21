@@ -18,8 +18,8 @@ public class VehicleController {
     private VehicleRepository vehicleRepository;
 
     @GetMapping("/vehicle")
-    public List<Vehicle> getMotorcycle(){
-    return this.vehicleRepository.findAll();
+    public List<Vehicle> getVehicle(){
+        return this.vehicleRepository.findAll();
     }
 
 
