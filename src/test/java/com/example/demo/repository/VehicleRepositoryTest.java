@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -28,21 +27,27 @@ class VehicleRepositoryTest {
 
     @Test
     public void testFindAllByVariant(){
-        assertEquals(2,vehicleRepository.findAllByVariant("Car").size());
+        assertEquals(2,vehicleRepository.findAllByVariantIgnoreCase("Car").size());
     }
 
     @Test
     public void testFindAllByBrand(){
-        assertEquals("Ducati",vehicleRepository.findAllByBrand("Ducati").stream().findFirst().get().getBrand());
+        assertEquals("Ducati",vehicleRepository.findAllByBrandIgnoreCase("ducati").stream().findFirst().get().getBrand());
     }
 
     @Test
     public void testFindAllByColor(){
-        assertEquals("Red",vehicleRepository.findAllByColor("Red").stream().findFirst().get().getColor());
+        assertEquals("Red",vehicleRepository.findAllByColorIgnoreCase("rEd").stream().findFirst().get().getColor());
     }
 
     @Test
     public void testFindAllByEngineCapacity(){
         assertEquals(1200L,vehicleRepository.findAllByEngineCapacity(1200L).stream().findFirst().get().getEngineCapacity());
+    }
+
+    @Test
+    public void testIdNotFound(){
+        Long id = 3333L;
+        assertTrue(vehicleRepository.findAllById(id).isEmpty());
     }
 }
