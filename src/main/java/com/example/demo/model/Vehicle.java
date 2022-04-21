@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,14 +13,18 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String variant;
+    @NotNull
     private String brand;
+    @NotNull
     private String color;
-    private String engineCapacity;
+    @NotNull
+    private Long engineCapacity;
 
     public Vehicle(){
     }
-    public Vehicle(String variant, String brand, String color, String engineCapacity) {
+    public Vehicle(String variant, String brand, String color, Long engineCapacity) {
         this.variant = variant;
         this.brand = brand;
         this.color = color;
@@ -37,7 +43,7 @@ public class Vehicle {
         return variant;
     }
 
-    public void setVariant(String color) {
+    public void setVariant(String variant) {
         this.variant = variant;
     }
 
@@ -57,11 +63,11 @@ public class Vehicle {
         this.color = color;
     }
 
-    public String getEngineCapacity() {
+    public Long getEngineCapacity() {
         return engineCapacity;
     }
 
-    public void setEngineCapacity(String engineCapacity) {
+    public void setEngineCapacity(Long engineCapacity) {
         this.engineCapacity = engineCapacity;
     }
 }
