@@ -1,20 +1,17 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Vehicle;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
-    List<Vehicle> findAllById(Long id);
-    List<Vehicle> findAllByVariantIgnoreCase(String variant);
-    List<Vehicle> findAllByBrandIgnoreCase(String brand);
-    List<Vehicle> findAllByColorIgnoreCase(String color);
-    List<Vehicle> findAllByEngineCapacity(Long engineCapacity);
-    void deleteById(Long id);
+public interface VehicleRepository extends PagingAndSortingRepository<Vehicle,  Integer> {
+    Page<Vehicle> findAllById(Integer id, Pageable pageable);
+    Page<Vehicle> findAllByVariantIgnoreCase(String variant, Pageable pageable);
+    Page<Vehicle> findAllByBrandIgnoreCase(String brand, Pageable pageable);
+    Page<Vehicle> findAllByColorIgnoreCase(String color, Pageable pageable);
+    Page<Vehicle> findAllByEngineCapacity(Long engineCapacity, Pageable pageable);
+    void deleteById(Integer id);
 }

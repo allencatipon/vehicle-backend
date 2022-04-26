@@ -3,14 +3,14 @@ package com.example.demo.controller;
 import com.example.demo.model.Vehicle;
 import com.example.demo.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin("http://localhost:3000/")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class VehicleController {
@@ -18,46 +18,41 @@ public class VehicleController {
     private VehicleRepository vehicleRepository;
 
     @GetMapping("/vehicle")
-    public List<Vehicle> getVehicle(@RequestParam String searchBy,
-                                    @RequestParam String searchValue,
-                                    @RequestParam String action,
-                                    @RequestParam Vehicle vehicle) {
-        switch(action){
-            case "add":
-                saveVehicle(buildVehicle(vehicle));
-            case "update":
-                updateVehicle(vehicle);
-            case "delete":
-                vehicleRepository.deleteById(vehicle.getId());
-            case "filter":
-                switch (searchBy) {
-                    case "all":
-                        return vehicleRepository.findAll();
-                    case "id":
-                        return vehicleRepository.findAllById(Long.valueOf(searchValue));
-                    case "variant":
-                        return vehicleRepository.findAllByVariantIgnoreCase(searchValue);
-                    case "brand":
-                        return vehicleRepository.findAllByBrandIgnoreCase(searchValue);
-                    case "color":
-                        return vehicleRepository.findAllByColorIgnoreCase(
-                                searchValue);
-                    case "engineCapacity":
-                        return vehicleRepository.findAllByEngineCapacity(Long.valueOf(searchValue));
-                }
+    public Page<Vehicle> get(@RequestParam String searchBy,
+                             @RequestParam String searchValue,
+                             Pageable pageable) {
+
+        if (!ObjectUtils.isEmpty(searchValue)) {
+            switch (searchBy) {
+                case "id":
+                    return this.vehicleRepository.findAllById(Integer.valueOf(searchValue), pageable);
+                case "variant":
+                    return this.vehicleRepository.findAllByVariantIgnoreCase(searchValue, pageable);
+                case "brand":
+                    return this.vehicleRepository.findAllByBrandIgnoreCase(searchValue, pageable);
+                case "color":
+                    return this.vehicleRepository.findAllByColorIgnoreCase(
+                            searchValue, pageable);
+                case "engineCapacity":
+                    return this.vehicleRepository.findAllByEngineCapacity(Long.valueOf(searchValue),
+                            pageable);
+                default:
+                    return this.vehicleRepository.findAll(pageable);
+            }
         }
-        return Collections.emptyList();
+
+        return this.vehicleRepository.findAll(pageable);
     }
 
-    private void updateVehicle(Vehicle vehicle) {
-        Optional<Vehicle> vehicleToBeUpdatedOpt = vehicleRepository.findById(vehicle.getId());
-        if(vehicleToBeUpdatedOpt.isPresent()){
-            Vehicle vehicleToBeUpdated = vehicleToBeUpdatedOpt.get();
-            vehicleToBeUpdated.setEngineCapacity(vehicle.getEngineCapacity());
-            vehicleToBeUpdated.setBrand(vehicle.getBrand());
-            vehicleToBeUpdated.setColor(vehicle.getColor());
-            saveVehicle(vehicleToBeUpdated);
-        }
+    @DeleteMapping("/vehicle")
+    public void delete(Vehicle vehicle) {
+        this.vehicleRepository.deleteById(vehicle.getId());
+    }
+
+    //create
+    @PostMapping("/vehicle")
+    public void post(@RequestBody Vehicle vehicle) {
+        saveVehicle(buildVehicle(vehicle));
     }
 
     private Vehicle buildVehicle(Vehicle vehicle) {
@@ -66,5 +61,17 @@ public class VehicleController {
 
     private void saveVehicle(Vehicle newVehicle) {
         vehicleRepository.save(newVehicle);
+    }
+
+    @PutMapping("/vehicle")
+    private void put(@RequestParam String id, @RequestBody Vehicle vehicle) {
+        Optional<Vehicle> retrievedVehicle = vehicleRepository.findById(Integer.valueOf(id));
+        if (retrievedVehicle.isPresent()) {
+            Vehicle vehicleToBeUpdated = retrievedVehicle.get();
+            vehicleToBeUpdated.setEngineCapacity(vehicle.getEngineCapacity());
+            vehicleToBeUpdated.setBrand(vehicle.getBrand());
+            vehicleToBeUpdated.setColor(vehicle.getColor());
+            saveVehicle(vehicleToBeUpdated);
+        }
     }
 }
