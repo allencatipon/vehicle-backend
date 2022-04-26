@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("http://localhost:3000/")
 @RestController
@@ -18,25 +19,52 @@ public class VehicleController {
 
     @GetMapping("/vehicle")
     public List<Vehicle> getVehicle(@RequestParam String searchBy,
-                                    @RequestParam String searchValue) {
-        if (!ObjectUtils.isEmpty(searchBy)) {
-            if (!ObjectUtils.isEmpty(searchValue)) {
+                                    @RequestParam String searchValue,
+                                    @RequestParam String action,
+                                    @RequestParam Vehicle vehicle) {
+        switch(action){
+            case "add":
+                saveVehicle(buildVehicle(vehicle));
+            case "update":
+                updateVehicle(vehicle);
+            case "delete":
+                vehicleRepository.deleteById(vehicle.getId());
+            case "filter":
                 switch (searchBy) {
+                    case "all":
+                        return vehicleRepository.findAll();
                     case "id":
-                        return this.vehicleRepository.findAllById(Long.valueOf(searchValue));
+                        return vehicleRepository.findAllById(Long.valueOf(searchValue));
                     case "variant":
-                        return this.vehicleRepository.findAllByVariantIgnoreCase(searchValue);
+                        return vehicleRepository.findAllByVariantIgnoreCase(searchValue);
                     case "brand":
-                        return this.vehicleRepository.findAllByBrandIgnoreCase(searchValue);
+                        return vehicleRepository.findAllByBrandIgnoreCase(searchValue);
                     case "color":
-                        return this.vehicleRepository.findAllByColorIgnoreCase(
+                        return vehicleRepository.findAllByColorIgnoreCase(
                                 searchValue);
                     case "engineCapacity":
-                        return this.vehicleRepository.findAllByEngineCapacity(Long.valueOf(searchValue));
+                        return vehicleRepository.findAllByEngineCapacity(Long.valueOf(searchValue));
                 }
-            }
-            return this.vehicleRepository.findAll();
         }
         return Collections.emptyList();
+    }
+
+    private void updateVehicle(Vehicle vehicle) {
+        Optional<Vehicle> vehicleToBeUpdatedOpt = vehicleRepository.findById(vehicle.getId());
+        if(vehicleToBeUpdatedOpt.isPresent()){
+            Vehicle vehicleToBeUpdated = vehicleToBeUpdatedOpt.get();
+            vehicleToBeUpdated.setEngineCapacity(vehicle.getEngineCapacity());
+            vehicleToBeUpdated.setBrand(vehicle.getBrand());
+            vehicleToBeUpdated.setColor(vehicle.getColor());
+            saveVehicle(vehicleToBeUpdated);
+        }
+    }
+
+    private Vehicle buildVehicle(Vehicle vehicle) {
+        return new Vehicle(vehicle.getVariant(), vehicle.getBrand(), vehicle.getColor(), vehicle.getEngineCapacity());
+    }
+
+    private void saveVehicle(Vehicle newVehicle) {
+        vehicleRepository.save(newVehicle);
     }
 }

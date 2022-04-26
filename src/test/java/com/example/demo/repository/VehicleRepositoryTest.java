@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Vehicle;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,39 @@ class VehicleRepositoryTest {
     public void testIdNotFound(){
         Long id = 3333L;
         assertTrue(vehicleRepository.findAllById(id).isEmpty());
+    }
+
+    @Test
+    public void deleteById(){
+        Long id = vehicleRepository.findAll().get(0).getId();
+        vehicleRepository.deleteById(id);
+        assertEquals(2, vehicleRepository.findAll().size());
+    }
+
+    @Test
+    public void saveNewVehicle(){
+        Vehicle newVehicle = new Vehicle("car", "toyota", "orange", 300L);
+        vehicleRepository.save(newVehicle);
+        assertEquals(4, vehicleRepository.findAll().size());
+    }
+
+    @Test
+    public void updateVehicle(){
+        Vehicle oldVehicleData = vehicleRepository.findAll().get(0);
+
+        Vehicle newVehicleData = new Vehicle();
+        newVehicleData.setColor("pink");
+        newVehicleData.setVariant(oldVehicleData.getVariant());
+        newVehicleData.setBrand("range rover");
+        newVehicleData.setEngineCapacity(1000L);
+        newVehicleData.setId(oldVehicleData.getId());
+
+        Vehicle newSavedVehicleData = vehicleRepository.save(newVehicleData);
+
+        assertEquals(oldVehicleData.getId(), newSavedVehicleData.getId());
+        assertEquals("pink", newSavedVehicleData.getColor());
+        assertEquals("range rover", newSavedVehicleData.getBrand());
+        assertEquals(1000L, newSavedVehicleData.getEngineCapacity());
+        assertEquals(oldVehicleData.getVariant(), newSavedVehicleData.getVariant());
     }
 }
