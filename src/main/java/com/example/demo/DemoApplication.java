@@ -19,6 +19,8 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String...args) throws Exception {
+		this.vehicleRepository.save(new Vehicle(VehicleEnum.CAR.variant, "Mitsubishi", "Black", 400L));
+		this.vehicleRepository.save(new Vehicle(VehicleEnum.CAR.variant, "Chervolet", "Black", 400L));
 		this.vehicleRepository.save(new Vehicle(VehicleEnum.CAR.variant, "Honda", "Black", 400L));
 		this.vehicleRepository.save(new Vehicle(VehicleEnum.MOTORCYCLE.variant,"Ducati", "Red", 1200L));
 		this.vehicleRepository.save(new Vehicle(VehicleEnum.CAR.variant, "Aprilla", "Orange", 900L));
