@@ -49,7 +49,6 @@ public class VehicleController {
         this.vehicleRepository.deleteById(vehicle.getId());
     }
 
-    //create
     @PostMapping("/vehicle")
     public void post(@RequestBody Vehicle vehicle) {
         saveVehicle(buildVehicle(vehicle));
