@@ -55,7 +55,8 @@ public class VehicleController {
     }
 
     private Vehicle buildVehicle(Vehicle vehicle) {
-        return new Vehicle(vehicle.getVariant(), vehicle.getBrand(), vehicle.getColor(), vehicle.getEngineCapacity());
+        return new Vehicle(vehicle.getVariant(), vehicle.getBrand(), vehicle.getColor(), vehicle.getEngineCapacity()
+                , false);
     }
 
     private void saveVehicle(Vehicle newVehicle) {

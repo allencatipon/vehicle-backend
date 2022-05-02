@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.sun.istack.NotNull;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,13 +23,18 @@ public class Vehicle {
     @NotNull
     private Long engineCapacity;
 
+    @NotNull
+    private Boolean isMigrated;
+
     public Vehicle(){
     }
-    public Vehicle(String variant, String brand, String color, Long engineCapacity) {
+    public Vehicle(String variant, String brand, String color,
+                   Long engineCapacity, Boolean isMigrated) {
         this.variant = variant;
         this.brand = brand;
         this.color = color;
         this.engineCapacity = engineCapacity;
+        this.isMigrated = isMigrated;
     }
 
     public Integer getId() {
@@ -69,5 +75,13 @@ public class Vehicle {
 
     public void setEngineCapacity(Long engineCapacity) {
         this.engineCapacity = engineCapacity;
+    }
+
+    public Boolean getIsMigrated() {
+        return isMigrated;
+    }
+
+    public void setIsMigrated(Boolean isMigrated) {
+        this.isMigrated = isMigrated;
     }
 }
