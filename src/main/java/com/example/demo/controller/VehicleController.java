@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-
-@CrossOrigin("http://localhost:3000/")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api")
 public class VehicleController {
@@ -38,5 +37,18 @@ public class VehicleController {
             return this.vehicleRepository.findAll();
         }
         return Collections.emptyList();
+    }
+
+    @PostMapping("/vehicle")
+    public void post(@RequestBody Vehicle vehicle) {
+        saveVehicle(buildVehicle(vehicle));
+    }
+
+    private Vehicle buildVehicle(Vehicle vehicle) {
+        return new Vehicle(vehicle.getVariant(), vehicle.getBrand(), vehicle.getColor(), vehicle.getEngineCapacity());
+    }
+
+    private void saveVehicle(Vehicle newVehicle) {
+        vehicleRepository.save(newVehicle);
     }
 }
