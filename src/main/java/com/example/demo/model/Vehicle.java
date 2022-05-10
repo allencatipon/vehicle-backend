@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import com.sun.istack.NotNull;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -81,7 +80,15 @@ public class Vehicle {
         return isMigrated;
     }
 
-    public void setIsMigrated(Boolean isMigrated) {
-        this.isMigrated = isMigrated;
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", variant='" + variant + '\'' +
+                ", brand='" + brand + '\'' +
+                ", color='" + color + '\'' +
+                ", engineCapacity=" + engineCapacity +
+                ", isMigrated=" + isMigrated +
+                '}';
     }
 }
