@@ -11,12 +11,22 @@ plugins {
 
 def springfoxVersion = '3.0.0'
 def springfoxUiVersion = '2.9.2'
+def lombokVersion = '1.18.24'
+def hibernateVersion = '7.0.4.Final'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation "org.hibernate:hibernate-validator:${hibernateVersion}"
+//    compileOnly "org.projectlombok:lombok:${lombokVersion}"
     implementation 'org.springframework.batch:spring-batch-core'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
